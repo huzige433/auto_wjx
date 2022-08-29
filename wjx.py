@@ -16,26 +16,34 @@ import conf
 def choose_answer():
     try:
         choose_one(1)  # 各项均为相同概率，可省略不写。
-        choose_one(2, [0.1, 0.2, 0.5, 0.2])
-        choose_one(3, exclude=[2, 3])  # 排除第 3 题中，第 2, 3 个选项。
-        choose_one(4, [0.4, 0.1, 0.2, 0.1, 0.2])
-        choose_one(5, [0.2, 0.2, 0.1, 0.3, 0.2])
-        choose_one(6, [0.25, 0.25, 0.25, 0.25])
-        choose_one(7, [0.3, 0.2, 0.1, 0.4])
-        choose_one(8, [0.2, 0.6, 0.2])
-        choose_multiple(9, [0.3, 0.25, 0.2, 0.125, 0.125], 3)
-        choose_multiple(10, [0.3, 0.25, 0.2, 0.15, 0.1])
-        choose_one(11, [0.1, 0.1, 0.2, 0.6])
-        choose_one(12, [0.2, 0.8])
-        choose_multiple(13, [0.4, 0.2, 0.3, 0.1], 2)
-        choose_multiple(14, [0.3, 0.3, 0.3, 0.1])
-        choose_multiple(15, [0.2, 0.2, 0.1, 0.2, 0.2, 0.1])
-        choose_multiple(16, [0.1, 0.2, 0.1, 0.3, 0.2, 0.1])
-        choose_multiple(17, [0.25, 0.25, 0.25, 0.25])
-        choose_multiple(18, [0.3, 0.3, 0.3, 0.1])
-        choose_multiple(19, [0.2, 0.1, 0.3, 0, 0.1, 0.2, 0.1], 3)  # 非相同概率时，没必要用 exclude。
-        choose_multiple(20)  # 各项均为相同概率，可省略不写。
-        choose_one(21, [0.2, 0.4, 0.3, 0.1])
+        elemen_tinput(2 , "测试2")
+        elemen_tinput(3 , "测试3")
+        elemen_tinput(4 , "测试4")
+        elemen_tinput(5 , "测试4",xpathtxt="//*[@id=\"div5\"]/div[3]/input")
+        elemen_tinput(6 , "测试")
+        elemen_tinput(7 , "测试")
+        elemen_tinput(8 , "测试4")
+        elemen_tinput(9 , "测试4")
+        elemen_tinput(10 , "天津-天津市-和平区",jschange=True)
+        elemen_tinput(11 , "天津-天津市-和平区")
+        choose_one(12)
+        choose_multiple(13)  # 排除第 3 题中，第 2, 3 个选项。
+        choose_multiple(14)
+        choose_multiple(15)
+        choose_multiple(16)
+        choose_multiple(17,[0.3, 0.3, 0.3, 0.1])
+        choose_multiple(18)
+        choose_multiple(19)
+        choose_multiple(20)
+        choose_multiple(21)
+        choose_multiple(22)
+        choose_multiple(23)
+        choose_multiple(24)
+        choose_multiple(25)
+        choose_multiple(26)
+        choose_multiple(27)
+        choose_multiple(28)
+        choose_multiple(29)
     except NoSuchElementException:
         logging.error("任务执行失败，请检查配置。")
 
@@ -83,6 +91,16 @@ def choose_multiple(question_number, question_probability=None, restrict=10000, 
     for i in chosen_number:
         driver.find_element(By.XPATH, f"//*[@id=\"div{question_number}\"]/div[2]/div[{i}]").click()
 
+def elemen_tinput(question_number , question_txt=None,jschange=False,xpathtxt=None):
+    if not xpathtxt:
+        el_checked = driver.find_element(By.XPATH, f"//*[@id=\"div{question_number}\"]/div[2]/input")
+    else:
+        el_checked = driver.find_element(By.XPATH , xpathtxt)
+    if jschange:
+        driver.execute_script(f'arguments[0].value="{question_txt}"' , el_checked)
+    else:
+        el_checked.send_keys(question_txt)
+
 
 def slider_move(loop_index, dest=380):
     """
@@ -113,7 +131,9 @@ def main():
             driver.find_element(By.XPATH, '//*[@id="ctlNext"]').click()
             time.sleep(0.5)
             driver.find_element(By.XPATH, '//*[@id="alert_box"]/div[2]/div[2]/button').click()
+            time.sleep(0.5)
             driver.find_element(By.XPATH, '//*[@id="rectMask"]').click()
+            time.sleep(0.5)
             print(f"第 {i} 次任务执行成功。")
             try:
                 WebDriverWait(driver, 15).until(
